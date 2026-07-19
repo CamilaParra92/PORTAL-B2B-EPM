@@ -352,7 +352,7 @@ const BRAND_CFG = {
   'Avry Beauty': {color:'#555',bg:'#f2f2f2',min:0,disc:[{at:360000,pct:5},{at:720000,pct:10}]},
 };
 
-const BRAND_CATS = {"Nail Pro": ["ACRILICOS", "EFECTOS", "ESMALTE PERMANENTE 15ML", "ESMALTE PERMANENTE 8ML", "ESMALTES ESPECIALES", "GEL CONSTRUCTOR", "GEL PAINT", "INSUMOS MANICURE", "LAMPARA", "POLYGEL", "PREPARADORES", "SOFT GEL", "TORNO"], "Go Nails": ["ACEITE CUTICULA", "CREMA CORPORAL", "CREMA MANOS Y PIES", "DIFUSOR AROMA", "EXFOLIANTE", "FRAGANCIA CORPORAL", "HIGIENIZANTE", "HOME SPRAY", "INSUMOS MANICURE", "LAMPARA", "MANTECA CORPORAL", "SKIN", "SOFT GEL"], "Go Hair": ["CAPILAR"], "Go Paw": ["FRAGANCIA MASCOTA"], "Bluesky": ["EFECTOS", "ESMALTE PERMANENTE 15ML", "ESMALTES ESPECIALES", "GEL CONSTRUCTOR", "INSUMOS MANICURE", "POLYGEL", "PREPARADORES"], "Artistic": ["ESMALTE PERMANENTE 15ML", "ESMALTE TRADICIONAL 15ML", "INSUMOS MANICURE", "LAMPARA", "PREPARADORES", "SOFT GEL", "TORNO"], "Avry Beauty": ["CREMA MANOS Y PIES", "HIDRATACION", "JELLY SPA"], "Go Living": ["DIFUSOR AROMA", "HOME SPRAY"]};
+const BRAND_CATS = {"Nail Pro": ["ACRILICOS", "EFECTOS", "ESMALTE PERMANENTE 15ML", "ESMALTE PERMANENTE 8ML", "ESMALTES ESPECIALES", "GEL CONSTRUCTOR", "GEL PAINT", "INSUMOS MANICURE", "LAMPARA", "POLYGEL", "PREPARADORES", "SOFT GEL", "TORNO"], "Go Nails": ["ACEITE CUTICULA", "CREMA CORPORAL", "CREMA MANOS Y PIES", "DIFUSOR AROMA", "EXFOLIANTE", "FRAGANCIA CORPORAL", "GEL DE DUCHA", "HIGIENIZANTE", "HOME SPRAY", "INSUMOS MANICURE", "JABON", "LAMPARA", "MANTECA CORPORAL", "SKIN", "SOFT GEL"], "Go Hair": ["CAPILAR"], "Go Paw": ["FRAGANCIA MASCOTA"], "Bluesky": ["EFECTOS", "ESMALTE PERMANENTE 15ML", "ESMALTES ESPECIALES", "GEL CONSTRUCTOR", "INSUMOS MANICURE", "POLYGEL", "PREPARADORES"], "Artistic": ["ESMALTE PERMANENTE 15ML", "ESMALTE TRADICIONAL 15ML", "INSUMOS MANICURE", "LAMPARA", "PREPARADORES", "SOFT GEL", "TORNO"], "Avry Beauty": ["CREMA MANOS Y PIES", "HIDRATACION", "JELLY SPA"], "Go Living": ["DIFUSOR AROMA", "HOME SPRAY"]};
 
 function isGoBrand(b) { return b && b.toUpperCase().startsWith('GO'); }
 
@@ -536,7 +536,7 @@ function doFilter() {
   filtered = PRODUCTS_DATA.filter(p => {
     const matchBrand = curBrand==='all' || p.b===curBrand;
     const matchCat = curCat==='all' || p.c===curCat;
-    const matchQ = !q || p.n.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q);
+    const matchQ = !q || (p.n||'').toLowerCase().includes(q) || (p.sku||'').toLowerCase().includes(q);
     if (!q) {
         if (p.unavail) return false;
         if ((p.b==='Nail Pro'||p.b==='Avry Beauty') && p.stock<=11) return false;
@@ -544,7 +544,7 @@ function doFilter() {
         else if (!(p.b==='Nail Pro'||p.b==='Avry Beauty'||p.b==='Artistic') && p.stock<=19) return false;
       }
     return matchBrand && matchCat && matchQ;
-  }).sort((a,b) => a.n.localeCompare(b.n, 'es'));
+  }).sort((a,b) => (a.n||'').localeCompare(b.n||'', 'es'));
   curPage=1; renderGrid(); renderPag();
 }
 
@@ -559,7 +559,7 @@ function renderGrid() {
     const k = p.sku.replace(/[^a-zA-Z0-9]/g,'_');
     const logoImg = ''; // Brand name already in product title
     // Image area: clean approach using data-k for error handling
-    const swatchInner = '<div class="pswatch-c" style="background:'+p.clr+'"></div><div class="pswatch-l">'+p.sku+'</div>';
+    const swatchInner = '<div class="pswatch-c" style="background:'+(p.clr||'#b0b0b0')+'"></div><div class="pswatch-l">'+(p.sku||'')+'</div>';
     let imgHtml;
     if (p.img) {
       imgHtml = '<img class="pimg-real" src="'+p.img+'" loading="lazy" data-k="'+k+'">'
@@ -585,7 +585,7 @@ function renderGrid() {
       +'<div class="pname">'+p.n+'</div>'
       +'<div class="psku">SKU: '+p.sku+'</div>'
       +(p.ps!=null?'<div class="pps">PVP sugerido: $'+p.ps.toLocaleString('es-CL')+'</div>':'')
-      +'<div class="ppm">$'+p.pm.toLocaleString('es-CL')+' <small style="font-weight:400;font-size:.7rem;color:var(--mu)">/und</small></div>'
+      +(p.pm!=null?'<div class="ppm">$'+p.pm.toLocaleString('es-CL')+' <small style="font-weight:400;font-size:.7rem;color:var(--mu)">/und</small></div>':'')
       +actionsHtml+'</div></div>';
   }
   grid.innerHTML = html;
