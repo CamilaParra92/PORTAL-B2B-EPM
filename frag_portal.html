@@ -6,7 +6,7 @@
 <p><b style="color:#e91e8c;font-size:1.4rem">EPM</b> Mayorista</p>
 <p>Cargando portal FRAGANCIAS...</p>
 <script>
-fetch('https://raw.githubusercontent.com/camilaparra92/PORTAL-B2B-EPM/629bc9bd7da11ce106d436c2dc16019622d7933e/fragancias_b.html',{cache:'no-store'})
+fetch('https://raw.githubusercontent.com/camilaparra92/PORTAL-B2B-EPM/4f65e74ea07980355a410167ecec0263bef8b660/fragancias_b.html',{cache:'no-store'})
 .then(function(r){return r.text();})
 .then(function(h){location.replace(URL.createObjectURL(new Blob([h],{type:'text/html;charset=utf-8'})));}).catch(function(){document.querySelector('p:last-of-type').innerHTML='Error. <a href="javascript:location.reload()" style="color:#e91e8c">Reintentar<\/a>';});
 <\/script>
